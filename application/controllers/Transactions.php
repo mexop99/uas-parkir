@@ -10,7 +10,13 @@ class Transactions extends CI_Controller
     }
 
 
-    public function masuk()
+    /**
+     * @return [type]
+     * function to view menu enter.
+     * untuk menampilkan menu parkir masuk.
+     * 
+     */
+    public function enter()
     {
         check_not_login(); // cek login atau belum
         $data['user_login'] = $this->fungsi->user_login(); // mengambil data dari libraries Fungsi.PHP
@@ -22,13 +28,19 @@ class Transactions extends CI_Controller
         $data['title'] = "Kendaraan Masuk | UAS-Parkir";
         $data['titlePage'] = "Kendaraan Masuk";
         $data['genreCost'] = $this->mparkingcost->getCost();
+        $data['parkingEnter']= $this->mparkingenter->getParkingEnter();
 
         // load view 
         $this->load->view('template/header', $data);
-        $this->template->load('template/globalTemplate', 'transactions/masuk', $data);
+        $this->template->load('template/globalTemplate', 'transactions/enter', $data);
         $this->load->view('template/footer');
     }
 
+    /**
+     * @return [type]
+     * funtion to add vehicle enter the parking lot
+     * -> fungsi untuk menambahkan data kendaraan yang sedang masuk parkir
+     */
     public function add()
     {
         $post = $this->input->post();
@@ -46,7 +58,10 @@ class Transactions extends CI_Controller
             'status'=> 1
 
         );
-        var_dump($array);
-        // $this->mparkingenter->addParkingEnter();
+        $this->mparkingenter->addParkingEnter($array);
+        $this->session->set_flashdata('message','ditambahkan!');
+        redirect('transactions/enter');
     }
+
+
 }

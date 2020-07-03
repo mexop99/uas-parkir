@@ -3,7 +3,8 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <?= $this->session->flashdata('message'); ?>
+                <div class="flash-data-success" data-flashdata="<?= $this->session->flashdata('message'); ?>">
+                </div>
                 <h1><?= $titlePage ?></h1>
             </div>
         </div>
@@ -90,13 +91,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>183</td>
-                                    <td>John Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="tag tag-success">Approved</span></td>
+                                <?php
+                                foreach ($parkingEnter  as $value) :
+                                ?>
+                                    <tr>
+                                        <td><?= $value->id ?></td>
+                                        <td><?= $value->plat_number ?></td>
+                                        <td><?= $value->nama_kendaraan ?></td>
+                                        <td>
+                                            <a href="#" title="lihat detail" type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal-edit<?= $value->id ?>">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
 
-                                </tr>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
@@ -105,4 +114,67 @@
             </div>
         </div>
     </div>
+
+
+    <?php
+    /**
+     * modal untuk edit data 
+     */
+    foreach ($parkingEnter as $c) : ?>
+        <div class="modal fade" id="modal-edit<?= $c->id ?>" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Detail Kendaran</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Label</th>
+                                    <th>keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1.</td>
+                                    <td>ID Parkir</td>
+                                    <td><?= $c->id ?></td>
+                                </tr>
+                                <tr>
+                                    <td>2.</td>
+                                    <td>Plat Nomor</td>
+                                    <td><?= $c->plat_number ?></td>
+                                </tr>
+                                <tr>
+                                    <td>3.</td>
+                                    <td>Jenis Kendaraan</td>
+                                    <td><?= $c->nama_kendaraan . " [" . $c->parking_cost_id . "] " ?></td>
+                                </tr>
+                                <tr>
+                                    <td>4.</td>
+                                    <td>Petugas Parkir</td>
+                                    <td><?= $c->username . " [" . $c->user_id . "] " ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    <?php endforeach; ?>
+
+
+
+
 </section>

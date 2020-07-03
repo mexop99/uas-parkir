@@ -1,51 +1,29 @@
-<!-- Main content -->
-<section class="content">
-    <!-- general form elements -->
-    <div class="card card-primary">
-        <div class="card-header">
-            <h3 class="card-title">Add User</h3>
-            <div class="card-tools">
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-warning"><i class="fas fa-undo"></i>Back</button>
-                </div>
-            </div>
-        </div>
-        <!-- /.card-header -->
-        <!-- form start -->
-        <form role="form">
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputFile">File input</label>
-                    <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="exampleInputFile">
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                        </div>
-                        <div class="input-group-append">
-                            <span class="input-group-text" id="">Upload</span>
+flash data
+
+                <?php
+                if ($this->session->flashdata('message')) : ?>
+                    <div class="card card-success">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Kendaraan <strong>Berhasil</strong> <?= $this->session->flashdata('message'); ?>
+                        </h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div>
-            </div>
-            <!-- /.card-body -->
+                <?php endif; ?>
 
-            <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </form>
-    </div>
-    <!-- /.card -->
-</section>
-<!-- /.content -->
+
+SELECT
+    pe.*,
+    pc.nama_kendaraan,
+    usr.username
+FROM
+    parking_enter pe
+INNER JOIN parking_cost pc ON
+    pe.parking_cost_id = pc.id
+INNER JOIN users usr ON
+    usr.id = pe.user_id ORDER BY pe.id ASC
