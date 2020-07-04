@@ -27,3 +27,48 @@ INNER JOIN parking_cost pc ON
     pe.parking_cost_id = pc.id
 INNER JOIN users usr ON
     usr.id = pe.user_id ORDER BY pe.id ASC
+
+SELECT
+    tr.*,
+    vh.plat_number,
+    vh.parking_cost_id,
+    pc.nama_kendaraan,
+    usr.username
+FROM
+    transactions tr
+INNER JOIN vehicle vh ON
+    tr.vehicle_id = vh.id
+INNER JOIN parking_cost pc ON
+    pc.id = vh.parking_cost_id
+INNER JOIN users usr ON
+    tr.user_id_enter = usr.id
+WHERE
+    tr.status_parking_id = 1 AND(
+        tr.time_enter BETWEEN 2020 -07 -05 AND NOW())
+    ORDER BY
+        tr.id ASC
+
+
+SELECT
+    tr.*,
+    vh.plat_number,
+    vh.parking_cost_id,
+    pc.nama_kendaraan,
+    usr.username usr_enter,
+    usr2.username usr_exit
+FROM
+    transactions tr
+INNER JOIN vehicle vh ON
+    tr.vehicle_id = vh.id
+INNER JOIN parking_cost pc ON
+    pc.id = vh.parking_cost_id
+INNER JOIN users usr ON
+    tr.user_id_enter = usr.id
+INNER JOIN users usr2 ON
+    tr.user_id_exit = usr2.id
+WHERE
+    tr.status_parking_id = 1 AND(
+        tr.time_enter BETWEEN '2020-07-04 00:00:00' AND '2020-07-05 05:00:00'
+    )
+ORDER BY
+    tr.id ASC

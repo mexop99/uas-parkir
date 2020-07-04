@@ -9,7 +9,6 @@
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
             </ul>
-
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
@@ -83,7 +82,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="<?= base_url('transactions/exit') ?>" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Kendaraan Keluar</p>
                                     </a>
@@ -159,7 +158,7 @@
             <div class="float-right d-none d-sm-block">
                 <b>Version</b> 0.0.1
             </div>
-            <strong>Copyright &copy; 2014-2019 <a href="#">MyGudang.io</a>.</strong> All rights
+            <strong>Copyright &copy; 2020 <a href="#">Uas-Parkir</a>.</strong> All rights
             reserved.
         </footer>
 

@@ -1,14 +1,12 @@
-<?php 
-date_default_timezone_set('Asia/Jakarta'); 
-?>
 <!-- Content Header (Page header) -->
+<?php date_default_timezone_set('Asia/Jakarta'); ?>
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
                 <div class="flash-data-success" data-flashdata="<?= $this->session->flashdata('message'); ?>">
                 </div>
-                <h1><?= $titlePage ?></h1>
+                <h1><?= $titlePage?></h1>
                 <span><?= date('Y-m-d') ?></span>
                 <h4>
                 </h4>
@@ -22,13 +20,14 @@ date_default_timezone_set('Asia/Jakarta');
 
 <section class="content">
     <div class="container">
-
-        <!-- div untuk memasukan data kendaraan yang parkir -->
         <div class="row">
+
+
+            <!-- div untuk memasukan data kendaraan yang parkir -->
             <div class="col-sm-4">
-                <div class="card card-info bg-navy color-palette">
+                <div class="card card-navy ">
                     <div class="card-header">
-                        <h3 class="card-title">Tulis Nomor Plat Kendaraan Masuk</h3>
+                        <h3 class="card-title">Tulis Nomor Plat Kendaraan Keluar</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
@@ -45,23 +44,11 @@ date_default_timezone_set('Asia/Jakarta');
                                 </div>
                             </div>
 
-                            <!-- menampilkan dropdown jenis kendaraan -->
-                            <div class="form-group">
-                                <label for="cost_id">Jenis Kendaraan</label>
-                                <select class="form-control" id="cost_id" name="cost_id">
-                                    <option value="" selected disabled hidden>Pilih...</option>
-                                    <?php
-                                    foreach ($genreCost as $g) : ?>
-                                        <option value="<?= $g->id ?>"><?= "[ " . $g->id . " ] - " . $g->nama_kendaraan ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <!-- /menampilkan dropdown jenis kendaraan -->
 
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-info">Submit</button>
+                            <button type="submit" class="btn bg-navy">Submit</button>
                         </div>
                     </form>
                 </div>
@@ -69,8 +56,65 @@ date_default_timezone_set('Asia/Jakarta');
             </div>
 
 
-            <!-- table untuk menampilkan data kendaraan Masuk -->
+            <!-- table untuk menampilkan data kendaraan KELUAR -->
             <div class="col-sm-8">
+                <div class="card p-3">
+                    <div class="card-header">
+                        <h3 class="card-title">Daftar Kendaraan Parkir KELUAR</h3>
+
+                        <div class="card-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                                <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0" style="height: 300px;">
+                        <table class="table table-head-fixed text-nowrap table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nomor Plat</th>
+                                    <th>Jenis Kendaraan</th>
+                                    <th>Status</th>
+                                    <th>Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($parkingExit  as $value) :
+                                ?>
+                                    <tr>
+                                        <td><?= $value->id ?></td>
+                                        <td><?= $value->plat_number ?></td>
+                                        <td><?= $value->nama_kendaraan ?></td>
+                                        <td>
+                                            <span class="badge bg-success">enter</span>
+                                        </td>
+                                        <td>
+                                            <a href="#" title="lihat detail" type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal-edit<?= $value->id ?>">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+
+
+
+
+            <!-- table untuk menampilkan data kendaraan Masuk -->
+            <div class="col-12">
                 <div class="card p-3">
                     <div class="card-header">
                         <h3 class="card-title">Daftar Kendaraan Parkir Masuk</h3>
@@ -86,13 +130,14 @@ date_default_timezone_set('Asia/Jakarta');
                         </div>
                     </div>
                     <!-- /.card-header -->
-                    <div class="card-body table-responsive p-0">
-                        <table class="table table-hover text-nowrap">
+                    <div class="card-body table-responsive p-0" style="height: 200px;">
+                        <table class="table table-head-fixed text-nowrap table-hover">
                             <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Nomor Plat</th>
                                     <th>Jenis Kendaraan</th>
+                                    <th>Status</th>
                                     <th>Detail</th>
                                 </tr>
                             </thead>
@@ -105,7 +150,10 @@ date_default_timezone_set('Asia/Jakarta');
                                         <td><?= $value->plat_number ?></td>
                                         <td><?= $value->nama_kendaraan ?></td>
                                         <td>
-                                            <a href="#" title="lihat detail" type="button" class="btn bg-success btn-xs" data-toggle="modal" data-target="#modal-edit<?= $value->id ?>">
+                                            <span class="badge bg-success">enter</span>
+                                        </td>
+                                        <td>
+                                            <a href="#" title="lihat detail" type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal-edit<?= $value->id ?>">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                         </td>
@@ -124,7 +172,7 @@ date_default_timezone_set('Asia/Jakarta');
 
     <?php
     /**
-     * modal untuk detail data 
+     * modal untuk detail data PARKIR MASUK
      */
     foreach ($parkingEnter as $c) : ?>
         <div class="modal fade" id="modal-edit<?= $c->id ?>" role="dialog">
@@ -165,11 +213,6 @@ date_default_timezone_set('Asia/Jakarta');
                                     <td>4.</td>
                                     <td>Petugas Parkir Masuk</td>
                                     <td><?= $c->username . " [" . $c->user_id_enter . "] " ?></td>
-                                </tr>
-                                <tr>
-                                    <td>5.</td>
-                                    <td>Waktu Masuk</td>
-                                    <td><?= $c->time_enter ?></td>
                                 </tr>
                             </tbody>
                         </table>
