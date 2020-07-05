@@ -21,7 +21,7 @@ class Transactions extends CI_Controller
      */
     public function enter()
     {
-        
+
         check_not_login(); // cek login atau belum
         $data['user_login'] = $this->fungsi->user_login(); // mengambil data dari libraries Fungsi.PHP
 
@@ -31,11 +31,11 @@ class Transactions extends CI_Controller
          */
         $data['title'] = "Kendaraan Masuk | UAS-Parkir";
         $data['titlePage'] = "Kendaraan Masuk";
-        $data['genreCost'] = $this->mparkingcost->getCost();
+        $data['genreCost'] = $this->mparkingcost->getGenre(1);
 
-        $thisDate= date('Y-m-d 00:00:00');
+        $thisDate = date('Y-m-d 00:00:00');
         var_dump($thisDate);
-        $data['parkingEnter'] = $this->mtransactions->readJoin(1,$thisDate, 'time_enter');
+        $data['parkingEnter'] = $this->mtransactions->readJoin(1, $thisDate, 'time_enter');
 
         // load view 
         $this->load->view('template/header', $data);
@@ -45,24 +45,86 @@ class Transactions extends CI_Controller
 
     public function exit()
     {
-        check_not_login(); // cek login atau belum
-        $data['user_login'] = $this->fungsi->user_login(); // mengambil data dari libraries Fungsi.PHP
+        // cek login atau belum
+        check_not_login();
+        // mengambil data dari libraries Fungsi.PHP
+        $data['user_login'] = $this->fungsi->user_login();
 
         /**
-         * getData for views
-         * (menyiapkan data untuk ditampilkan di views)
+         * Validasi inputan form
          */
-        $data['title'] = "Kendaraan Keluar | UAS-Parkir";
-        $data['titlePage'] = "Kendaraan Keluar";
-        
-        $thisDate= date('Y-m-d 00:00:00');     
-        $data['parkingEnter'] = $this->mtransactions->readJoin(1,$thisDate, 'time_enter');
-        $data['parkingExit'] = $this->mtransactions->readJoin(2,$thisDate, 'time_exit');   
+        $this->form_validation->set_rules('plat', 'PLAT', 'required');
+        $this->form_validation->set_rules('nomor', 'nomor', 'required');
+        $this->form_validation->set_rules('back', 'back', 'required');
 
-        // load view 
-        $this->load->view('template/header', $data);
-        $this->template->load('template/globalTemplate', 'transactions/exit', $data);
-        $this->load->view('template/footer');
+        if ($this->form_validation->run() == true) {
+
+            /**
+             * mengambil nilai inputan kendaraan keluar
+             * mengecek apakah sudah ada inputan dari form menu parkir keluar
+             */
+            $plat = strtoupper($this->input->post('plat'));
+            $nomor = strtoupper($this->input->post('nomor'));
+            $back = strtoupper($this->input->post('back'));
+            $plat_number = $plat . "-" . $nomor . "-" . $back;
+            $idPlat = $this->mvehicle->getID($plat_number);
+            if ($idPlat->num_rows() > 0) {
+                $resultOneTrs = $this->mtransactions->getTrsJoinVh($idPlat);
+                /**
+                 * $resultOneTrs->num_rows() : untuk mengambil nilai row dari hasil query
+                 * $resultOneTrs->row_object() : untuk mengambil hasil query dalam array object
+                 * gunakan `var_dump($resultOneTrs->row_object());` untuk melihat hasil query
+                 */
+                if ($resultOneTrs->num_rows() > 0) {
+                    $resultOneTrs = $resultOneTrs->row_object();
+                    $id = $resultOneTrs->id;
+                    $time_enter = strtotime($resultOneTrs->time_enter);
+                    $time_exit = strtotime(date('Y-m-d H:m:s'));
+                    $tarif = $resultOneTrs->tarif;
+                    $totaltarif = 0;
+
+                    $detik = $time_exit - $time_enter;
+                    $jam = floor($detik / (60 * 60));
+
+                    if ($jam == 0) {
+                        $totaltarif = 1 * $tarif;
+                    } else {
+                        $totaltarif = $jam * $tarif;
+                    }
+                    $array = array(
+                        'time_exit' => date('Y-m-d H:m:s'),
+                        'status_parking_id' => 2,
+                        'user_id_exit' => (int) $this->session->userdata('id'),
+                        'total_tarif' => $totaltarif,
+
+                    );
+                    $this->mtransactions->exitVehicle($id, $array);
+                    $this->session->set_flashdata('message', 'Kendaraan BerHasil Keluar!');
+                    redirect('transactions/exit');
+                } else {
+                    var_dump("data tak ditemukan!");
+                }
+            }else {
+                var_dump("data tak ditemukan!");
+            }
+        } else {
+            /**
+             * getData for views
+             * (menyiapkan data untuk ditampilkan di views)
+             */
+            $data['title'] = "Kendaraan Keluar | UAS-Parkir";
+            $data['titlePage'] = "Kendaraan Keluar";
+            // $data['titlePage'] = "Kendaraan Keluar | ". $plat_number . " | ". $idPlat;
+
+            $thisDate = date('Y-m-d 00:00:00');
+            $data['parkingEnter'] = $this->mtransactions->readJoin(1, $thisDate, 'time_enter');
+            $data['parkingExit'] = $this->mtransactions->readJoin(2, $thisDate, 'time_exit');
+
+            // load view 
+            $this->load->view('template/header', $data);
+            $this->template->load('template/globalTemplate', 'transactions/exit', $data);
+            $this->load->view('template/footer');
+        }
     }
 
 
@@ -122,13 +184,13 @@ class Transactions extends CI_Controller
         $plat = strtoupper($this->input->post('plat'));
         $nomor = strtoupper($this->input->post('nomor'));
         $back = strtoupper($this->input->post('back'));
-        $plat_number = $plat ."-". $nomor ."-". $back;
+        $plat_number = $plat . "-" . $nomor . "-" . $back;
         $cost_id = $this->input->post('cost_id');
         date_default_timezone_set('Asia/Jakarta');
 
 
         /**
-         * untuk mengecek apakah plat nomro sudah terdaftar di database atau belum.
+         * untuk mengecek apakah plat nomor sudah terdaftar di database atau belum.
          * is the plat_number registered?
          */
         $numRowsPlat = $this->mvehicle->checkReg($plat_number);
@@ -142,7 +204,7 @@ class Transactions extends CI_Controller
             /**
              * mengambil ID vehicle yang sudah berhasil di daftarkan
              */
-            $idVehicle = $this->mvehicle->getID($plat_number);
+            $idVehicle = $this->mvehicle->getID($plat_number)->row_object()->id;
 
             /**
              * insert into table transactions

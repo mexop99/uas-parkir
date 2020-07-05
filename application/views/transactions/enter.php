@@ -22,11 +22,11 @@ date_default_timezone_set('Asia/Jakarta');
 
 <section class="content">
     <div class="container">
+        <div class="row">
 
         <!-- div untuk memasukan data kendaraan yang parkir -->
-        <div class="row">
             <div class="col-sm-4">
-                <div class="card card-info bg-navy color-palette">
+                <div class="card card-info">
                     <div class="card-header">
                         <h3 class="card-title">Tulis Nomor Plat Kendaraan Masuk</h3>
                     </div>
@@ -164,7 +164,7 @@ date_default_timezone_set('Asia/Jakarta');
                                 <tr>
                                     <td>4.</td>
                                     <td>Petugas Parkir Masuk</td>
-                                    <td><?= $c->username . " [" . $c->user_id_enter . "] " ?></td>
+                                    <td><?= $c->usr_enter . " [" . $c->user_id_enter . "] " ?></td>
                                 </tr>
                                 <tr>
                                     <td>5.</td>

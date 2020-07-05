@@ -49,6 +49,7 @@
                         <th>Jenis Kendaraan</th>
                         <th> Roda </th>
                         <th>Tarif</th>
+                        <th>isAvtive?</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -66,17 +67,12 @@
                             <td> <?= $c->roda ?> </td>
                             <td> <?= $c->tarif ?> </td>
                             <td>
-                                <form action="<?= base_url('parkingcost/delete') ?>" method="POST">
-
-                                    <a href="#" type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal-edit<?= $c->id ?>">
-                                        <i class="fas fa-user-edit"></i>
-                                    </a>
-                                    <!-- button untuk hapus user -->
-                                    <input type="hidden" value="" name="id">
-                                    <button class="btn btn-xs btn-danger" onclick="return confirm('anda yakin menghapus [<?= $c->nama_kendaraan ?>] ?')">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
+                            <?= $c->isActive == 1 ? "<span class='badge bg-success'>Active</span>" : "<span class='badge bg-secondary'>Non Active</span>" ?></td>
+                            <td>
+                                <button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#modal-edit<?= $c->id ?>">
+                                    <i class="fas fa-edit"></i>
+                                    Edit Data
+                                </button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -88,7 +84,7 @@
     </div>
     <!-- /.card -->
 
-<!-- modal untuk tambah data -->
+    <!-- modal untuk tambah data -->
     <div class="modal fade" id="modal-add">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -145,7 +141,7 @@
                         </button>
                     </div>
                     <form action="<?= base_url('parkingcost/update') ?>" method="POST">
-                    <input type="hidden" name="id" id="id" value="<?= $c->id ?>">
+                        <input type="hidden" name="id" id="id" value="<?= $c->id ?>">
                         <div class="modal-body">
                             <div class="card-body">
                                 <div class="form-group">
@@ -159,6 +155,17 @@
                                 <div class="form-group">
                                     <label for="tarif">Tarif</label>
                                     <input type="number" name="tarif" class="form-control" id="tarif" placeholder="exp: 4000" value="<?= $c->tarif ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tarif">isActive</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="isActive" <?= $c->isActive == 1 ? "checked":"" ?> value="1">
+                                        <label class="form-check-label" >Active</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="isActive" <?= $c->isActive == 0 ? "checked":"" ?> value="0">
+                                        <label class="form-check-label">Non Active</label>
+                                    </div>
                                 </div>
                             </div>
                             <!-- /.card-body -->

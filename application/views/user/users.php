@@ -67,7 +67,7 @@
                             <td> <?= $row['id'] ?> </td>
                             <td> <?= $row['name'] ?> </td>
                             <td> <?= $row['username'] ?> </td>
-                            <td> <?= $row['role_id'] == 1 ? "Admin" : "Karyawan" ?></td>
+                            <td> <?= $row['role_id'] == 1 ? "Admin" : "Petugas Parkir" ?></td>
                             <td> <?= $row['is_active'] == 0 ? "Non Aktif" : "Aktif" ?> </td>
                             <td>
                                 <form action="<?= base_url('users/delete') ?>" method="POST">

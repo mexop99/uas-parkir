@@ -20,7 +20,7 @@ class MVehicle extends CI_Model
     public function getID($plat)
     {
         $this->db->select('id');
-        return $this->db->get_where($this->_table,['plat_number' => $plat])->row_object()->id;
+        return $this->db->get_where($this->_table,['plat_number' => $plat]);
     }
 
     public function add($array)

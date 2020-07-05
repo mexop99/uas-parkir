@@ -30,6 +30,11 @@ class MParkingCost extends CI_Model
         
     }
 
+    public function getGenre($isActive)
+    {
+        return $this->db->get_where($this->_table, ['isActive'=>$isActive])->result_object();
+    }
+
     public function update($array, $id)
     {
         
@@ -37,8 +42,16 @@ class MParkingCost extends CI_Model
         $this->db->where('id', $id);
         $this->db->update($this->_table);
     }
+
     public function getCount()
     {
         return $this->db->count_all($this->_table);
+    }
+
+
+    public function delete($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete($this->_table);
     }
 }

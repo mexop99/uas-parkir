@@ -50,11 +50,13 @@ class ParkingCost extends CI_Controller
         $nama_kendaraan = $this->input->post('nama_kendaraan');
         $roda = $this->input->post('roda');
         $tarif = $this->input->post('tarif');
+        $isActive = $this->input->post('isActive');
 
         $array = array(
             'nama_kendaraan' => $nama_kendaraan,
             'roda' => $roda,
-            'tarif' => $tarif
+            'tarif' => $tarif,
+            'isActive'=> $isActive
         );
 
         /**
@@ -77,5 +79,10 @@ class ParkingCost extends CI_Controller
         );
         redirect(base_url('parkingcost'));
         // }
+    }
+
+
+    public function delete()
+    {
     }
 }

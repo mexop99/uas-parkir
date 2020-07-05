@@ -129,7 +129,7 @@
                             
                             <li class="nav-item">
                                 <a href="<?= base_url('parkingcost'); ?>" class="nav-link">
-                                    <i class="nav-icon fas fa-users"></i>
+                                <i class=" nav-icon fas fa-truck"></i>
                                     <p>Biaya Parkir</p>
                                 </a>
                             </li>
